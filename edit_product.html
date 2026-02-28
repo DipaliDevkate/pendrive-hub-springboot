@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product - Admin Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .edit-container {
+            background-color: #fff;
+            padding: 40px;
+            margin-top: 50px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            width: 450px;
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0d6efd;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-top: 15px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #0d6efd;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0b5ed7;
+            transform: scale(1.05);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-container">
+        <h1>Edit Product</h1>
+        <form th:action="@{/admin/product/update}" th:object="${product}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}"/>
+
+            <label>Name:</label>
+            <input type="text" th:field="*{name}" required/>
+
+            <label>Description:</label>
+            <input type="text" th:field="*{description}" required/>
+
+            <label>Price (₹):</label>
+            <input type="number" step="0.01" th:field="*{price}" required/>
+
+            <label>Discount (%):</label>
+            <input type="number" step="0.01" th:field="*{discount}"/>
+
+            <label>Quantity:</label>
+            <input type="number" th:field="*{quantity}" required/>
+
+            <label>Product Image:</label>
+            <input type="file" name="imageFile"/>
+
+            <button type="submit">Update Product</button>
+        </form>
+        <a class="back-link" th:href="@{/admin/products}">&larr; Back to Dashboard</a>
+    </div>
+</body>
+</html>

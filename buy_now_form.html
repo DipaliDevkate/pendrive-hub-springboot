@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy Now - Pendrive Hub</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .buy-container {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin-top: 50px;
+            width: 400px;
+            transition: transform 0.3s ease;
+        }
+
+        h2 {
+            color: #0d6efd;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="number"], input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #198754;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #0d6efd;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0b5ed7;
+            transform: scale(1.05);
+        }
+
+        .confirmation {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #198754;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="buy-container">
+        <h2>Buy Now: <span th:text="${product.name}">Product Name</span></h2>
+
+        <form th:action="@{/user/buy-now/confirm}" method="post" id="buyForm">
+            <input type="hidden" name="productId" th:value="${product.id}" />
+
+            <label>Quantity:</label>
+            <input type="number" name="quantity" min="1" value="1" id="quantity" required/>
+
+            <label>Address:</label>
+            <textarea name="address" required></textarea>
+
+            <label>Mobile Number:</label>
+            <input type="text" name="mobile" required/>
+
+            <div class="total-price">
+                Total Price: ₹<span id="totalPrice" th:text="${product.finalPrice}">0.00</span>
+            </div>
+
+            <button type="submit">Confirm Order</button>
+        </form>
+
+        <div class="confirmation" id="confirmationMsg">
+            ✅ Your order has been confirmed!
+        </div>
+    </div>
+
+    <script>
+        const quantityInput = document.getElementById('quantity');
+        const totalPriceSpan = document.getElementById('totalPrice');
+        const pricePerUnit = /*[[${product.finalPrice}]]*/ 0;
+
+        quantityInput.addEventListener('input', function() {
+            const qty = parseInt(this.value) || 1;
+            totalPriceSpan.textContent = (qty * pricePerUnit).toFixed(2);
+        });
+
+        const form = document.getElementById('buyForm');
+        const confirmation = document.getElementById('confirmationMsg');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // prevent immediate submission
+            confirmation.style.display = 'block';
+            form.style.opacity = '0.5';
+            form.style.pointerEvents = 'none';
+            setTimeout(() => form.submit(), 1500); // submit after animation
+        });
+    </script>
+</body>
+</html>

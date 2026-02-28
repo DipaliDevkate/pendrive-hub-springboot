@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: #0d6efd;
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #0d6efd;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e0f0ff;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 0 3px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        a.add-btn {
+            background-color: #198754;
+        }
+
+        a.add-btn:hover {
+            background-color: #146c43;
+        }
+
+        a.edit-btn {
+            background-color: #ffc107;
+        }
+
+        a.edit-btn:hover {
+            background-color: #e0a800;
+        }
+
+        a.delete-btn {
+            background-color: #dc3545;
+        }
+
+        a.delete-btn:hover {
+            background-color: #b02a37;
+        }
+
+        a.home-btn {
+            background-color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        a.home-btn:hover {
+            background-color: #495057;
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            table, th, td {
+                font-size: 0.9rem;
+            }
+
+            img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    Admin Dashboard
+</header>
+
+<div class="container">
+
+    <a href="/" class="home-btn">← Back to Home</a>
+    <a th:href="@{/admin/product/add}" class="add-btn">Add Product</a>
+
+    <h2>All Products</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price (₹)</th>
+            <th>Quantity</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="p : ${products}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.finalPrice}"></td>
+            <td th:text="${p.quantity}"></td>
+            <td>
+                <img th:src="@{${p.imagePath}}" alt="Product Image"/>
+            </td>
+            <td>
+                <a th:href="@{/admin/product/edit/{id}(id=${p.id})}" class="edit-btn">Edit</a>
+                <a th:href="@{/admin/product/delete/{id}(id=${p.id})}" class="delete-btn">Delete</a>
+            </td>
+        </tr>
+    </table>
+
+    <h2>User Order History</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Mobile Number</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total (₹)</th>
+                <th>Order Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="o : ${orders}">
+                <td th:text="${o.user.name}"></td>
+                <td th:text="${o.mobileNumber}"></td>
+                <td th:text="${o.product.name}"></td>
+                <td th:text="${o.quantity}"></td>
+                <td th:text="${o.totalAmount}"></td>
+                <td th:text="${#temporals.format(o.orderDate, 'dd-MM-yyyy HH:mm')}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
